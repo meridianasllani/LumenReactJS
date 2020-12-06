@@ -11,15 +11,15 @@ class CoursesController extends Controller
 
     public function index() {
         $course = Course::all();
-        return $this->success($course);
+        return $this->response($course);
     }
 
     public function show($id) {
         $course = Course::find($id);
         if ($course) {
-            return $this->success($course);
+            return $this->response($course);
         } else {
-            return $this->error("No Course with the specified ID not found!");
+            return $this->response("No Course with the specified ID not found!");
         }
     }
 
@@ -43,8 +43,17 @@ class CoursesController extends Controller
     }
 
     public function store(Request $request) {
+
+        $this->validate($request, [
+            'name' => 'required',
+            'description' => 'required',
+            'category' => 'required|in:Free,Subscription,Locked,Paid',
+            'teacher' => 'required',
+            'video_link' => 'required|url'
+        ]);
+
         $course = Course::create($request->all());
-        return $this->success($course);
+        return $this->response($course);
     }
 
     public function destroy($id) {
@@ -52,19 +61,13 @@ class CoursesController extends Controller
         $course = Course::find($id);
         if ($course) {
             $course->delete();
-            return $this->success("Course Deleted!");
-
+            return $this->response("Course Deleted!");
         } else {
-            return $this->error("Course with the specified ID not found");
+            return $this->response("Course with the specified ID not found");
         }
     }
 
-    public function success($data) {
-        return response()->json($data);
+    public function response($response) {
+        return response()->json($response);
     }
-
-    public function error($text) {
-        return response()->json($text);
-    }
-
 }

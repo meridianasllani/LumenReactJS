@@ -3,7 +3,7 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Card } from "react-bootstrap";
 import "./Course.css";
-import defaultImage from "./img/course.jpg";
+import Image from "./img/course.jpg";
 
 class Course extends Component {
   constructor() {
@@ -31,10 +31,14 @@ class Course extends Component {
         <Row>
           {this.state.courses.map((course, index) => (
             <div className="col-md-3">
-              <Card className= "card"key={index}>
-                <Card.Img className="profile" src={defaultImage}></Card.Img>
+              <Card className="card" key={index}>
+                <Card.Img className="profile" src={Image}></Card.Img>
                 <Card.Title className="title">{course.name}</Card.Title>
-                <Card.Text>{course.description}</Card.Text>
+                <Card.Text>
+                  {course.description.length > 165
+                    ? `${course.description.substring(0, 165)}...`
+                    : course.description}
+                </Card.Text>
               </Card>
             </div>
           ))}
